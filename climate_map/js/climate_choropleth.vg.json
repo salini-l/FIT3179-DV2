@@ -79,7 +79,7 @@
         "color": {
           "field": "DeltaFromGlobal",
           "type": "quantitative",
-          "title": "Difference from Global Mean (°C)",
+          "title": "Change from Global Mean (°C)",
           "scale": { "scheme": "redblue", "domainMid": 0 }
         },
         "opacity": {
