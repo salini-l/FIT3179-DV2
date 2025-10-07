@@ -1,0 +1,109 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Temperature Anomaly Over Time in Australia",
+    "subtitle": "Annual mean ΔT vs 1960 baseline (°C)",
+    "dy": 8
+  },
+  "width": 900,
+  "height": 340,
+  "padding": 10,
+
+  "data": {
+    "url": "https://salini-l.github.io/fit3179-week9-map/data/temp_change_country_year.csv"
+  },
+
+  "params": [
+    {
+      "name": "startYear",
+      "value": 1960,
+      "bind": { "input": "range", "min": 1960, "max": 2020, "step": 1, "name": "Start year: " }
+    },
+    {
+      "name": "endYear",
+      "value": 2020,
+      "bind": { "input": "range", "min": 1960, "max": 2020, "step": 1, "name": "End year: " }
+    }
+  ],
+
+  "transform": [
+    { "filter": "datum.Area == 'Australia'" },
+    { "filter": "datum.Year >= startYear && datum.Year <= endYear" }
+  ],
+
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "quantitative",
+      "title": "Year",
+      "scale": { "zero": false },
+      "axis": {
+        "values": [1960,1970,1980,1990,2000,2010,2020],
+        "format": "d",
+        "labelOverlap": "greedy",
+        "labelPadding": 6
+      }
+    },
+    "y": {
+      "field": "TempChange_C",
+      "type": "quantitative",
+      "title": "ΔT vs 1960 (°C)",
+      "axis": { "tickCount": 6, "labelPadding": 4 },
+      "scale": { "domain": [-1.1, 2.5] }
+    }
+  },
+
+  "layer": [
+    {
+      "transform": [
+        {
+          "aggregate": [
+            { "op": "mean", "field": "TempChange_C", "as": "MeanDT" },
+            { "op": "min",  "field": "Year",          "as": "YearMin" },
+            { "op": "max",  "field": "Year",          "as": "YearMax" }
+          ]
+        },
+        { "calculate": "datum.YearMax - 0.5", "as": "LabelX" }
+      ],
+      "layer": [
+        {
+          "mark": { "type": "rule", "stroke": "#ef4444", "strokeWidth": 2, "opacity": 0.9, "strokeCap": "butt" },
+          "encoding": {
+            "x":  { "field": "YearMin", "type": "quantitative" },
+            "x2": { "field": "YearMax" },
+            "y":  { "field": "MeanDT",  "type": "quantitative" }
+          }
+        },
+        {
+          "mark": { "type": "text", "align": "left", "dx": 6, "dy": -6, "fontSize": 12, "fill": "#ef4444" },
+          "encoding": {
+            "x": { "field": "LabelX", "type": "quantitative" },
+            "y": { "field": "MeanDT", "type": "quantitative" },
+            "text": { "value": "Mean ΔT" }
+          }
+        }
+      ]
+    },
+
+    {
+      "mark": { "type": "line", "interpolate": "monotone", "strokeWidth": 2 },
+      "encoding": { "order": { "field": "Year" } }
+    },
+    {
+      "mark": { "type": "point", "filled": true, "size": 30 },
+      "encoding": {
+        "tooltip": [
+          { "field": "Area", "title": "Country" },
+          { "field": "Year", "title": "Year", "format": "d" },
+          { "field": "TempChange_C", "title": "Warming vs baseline (°C)", "format": "+.2f" }
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "title": { "fontSize": 18, "subtitleFontSize": 13, "anchor": "start" },
+    "axis": { "grid": true },
+    "view": { "stroke": null }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "2010s Global Warming: Above/Below Global Mean by Country",
+  "width": 800,
+  "height": 420,
+  "projection": { "type": "equalEarth" },
+
+  "data": {
+    "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/3_choropleth_map/js/ne_110m_admin_0_countries.topojson",
+    "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+  },
+
+  "params": [
+    {
+      "name": "focusCountry",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "name": "Highlight: ",
+        "options": ["All", "Australia"]
+      }
+    }
+  ],
+
+  "layer": [
+    {
+      "transform": [
+        { "calculate": "'No data matched for ' + datum.properties.NAME", "as": "note" }
+      ],
+      "mark": { "type": "geoshape", "fill": "#eeeeee", "stroke": "white" },
+      "encoding": { "tooltip": { "field": "note" } }
+    },
+
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/7_others/oceans.topojson",
+        "format": { "type": "topojson", "feature": "oceans" }
+      },
+      "mark": { "type": "geoshape", "fill": "#bfe3ff" }
+    },
+
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/2_symbol_map/js/WorldMapWithGraticules.topojson",
+        "format": { "type": "topojson", "feature": "ne_110m_graticules_30" }
+      },
+      "mark": { "type": "geoshape", "fill": null, "stroke": "#c9d2dc" }
+    },
+
+    {
+      "transform": [
+        {
+          "lookup": "properties.NAME",
+          "from": {
+            "data": { "url": "https://salini-l.github.io/fit3179-week9-map/data/temp_change_decade_2010s.csv" },
+            "key": "Area",
+            "fields": ["Anomaly_2010s_C"]
+          }
+        },
+        { "filter": "isValid(datum.Anomaly_2010s_C)" },
+        {
+          "joinaggregate": [
+            { "op": "mean", "field": "Anomaly_2010s_C", "as": "GlobalMean_C" }
+          ]
+        },
+        { "calculate": "datum.Anomaly_2010s_C - datum.GlobalMean_C", "as": "DeltaFromGlobal" }
+      ],
+
+      "params": [
+        {
+          "name": "hoverRel2010s",
+          "select": { "type": "point", "fields": ["properties.NAME"], "on": "pointerover", "clear": "pointerout" }
+        }
+      ],
+
+      "mark": { "type": "geoshape", "stroke": "white" },
+
+      "encoding": {
+        "color": {
+          "field": "DeltaFromGlobal",
+          "type": "quantitative",
+          "title": "Difference from Global Mean (°C)",
+          "scale": { "scheme": "redblue", "domainMid": 0 }
+        },
+        "opacity": {
+          "condition": [
+            { "param": "hoverRel2010s", "value": 1 },
+            { "test": "focusCountry == 'All' || datum.properties.NAME == focusCountry", "value": 1 }
+          ],
+          "value": 0.35
+        },
+        "strokeWidth": {
+          "condition": [
+            { "param": "hoverRel2010s", "value": 1.2 },
+            { "test": "datum.properties.NAME == focusCountry", "value": 1.6 }
+          ],
+          "value": 0.4
+        },
+        "tooltip": [
+          { "field": "properties.NAME", "title": "Country" },
+          { "field": "Anomaly_2010s_C", "title": "2010s ΔT (°C)", "format": "+.2f" },
+          { "field": "GlobalMean_C", "title": "Global Mean (°C)", "format": "+.2f" },
+          { "field": "DeltaFromGlobal", "title": "Above/Below Global (°C)", "format": "+.2f" }
+        ]
+      }
+    },
+
+    {
+      "transform": [
+        { "filter": "focusCountry != 'All'" },
+        { "filter": "datum.properties && datum.properties.NAME == focusCountry" }
+      ],
+      "mark": { "type": "geoshape", "fill": null, "stroke": "#111827", "strokeWidth": 1.5 }
+    },
+
+    {
+      "data": { "url": "https://salini-l.github.io/fit3179-week9-map/data/temp_change_decade_2010s.csv" },
+      "transform": [
+        { "filter": "isValid(datum.Anomaly_2010s_C)" },
+        {
+          "joinaggregate": [
+            { "op": "mean", "field": "Anomaly_2010s_C", "as": "GlobalMean_C" }
+          ]
+        },
+        { "filter": "datum.Area == 'Australia'" },
+        { "calculate": "datum.Anomaly_2010s_C - datum.GlobalMean_C", "as": "DeltaFromGlobal" },
+        { "calculate": "'Australia: ' + format(datum.DeltaFromGlobal, '+.2f') + ' °C vs global'", "as": "label" }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "dy": -6,
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "fill": "#111827"
+      },
+      "encoding": {
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude":  { "field": "lat", "type": "quantitative" },
+        "text":      { "field": "label" }
+      }
+    },
+
+
+  ],
+
+  "config": {
+    "view": { "stroke": null },
+    "legend": { "titleFontSize": 12, "labelFontSize": 11 }
+  }
+}
+
+
