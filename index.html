@@ -14,25 +14,29 @@
 <body>
   <header>
     <h1>Climate Change Visualisations</h1>
-    <p class="note">Map of 2010s temperature anomaly and an interactive country trend (ΔT vs 1960 baseline).</p>
+    <p class="note">2010s temperature anomaly map and Australia-focused charts.</p>
   </header>
 
-<main>
+  <main>
     <section class="grid">
-      <!-- Map -->
       <section class="card">
         <h2>Map — 2010s Above/Below Global Mean</h2>
-        <div id="map" class="vis"></div>
+        <div id="world_map" class="vis"></div>
       </section>
 
-      <!-- Decadal bars (Australia) -->
       <section class="card">
         <h2>Australia — Decadal Mean Temperature Anomaly</h2>
         <div id="aus_decadal" class="vis"></div>
       </section>
     </section>
 
-    <!-- Boxplots row -->
+      <section class="card">
+        <h2>Trend Graph</h2>
+        <div id="aus_trend" class="vis"></div>
+      </section>
+    </section>
+
+
     <section class="grid" style="margin-top:16px">
       <section class="card" style="grid-column:1/-1">
         <h2>Australia — Annual Anomalies by Decade (Boxplots)</h2>
@@ -46,10 +50,11 @@
   </footer>
 
   <script>
-    // ===== SPEC URLs =====
-    const MAP_SPEC       = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/climate_map/js/climate_choropleth.vg.json";
-    const AUS_BARS_SPEC  = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/bar_graph/js/bar_graph.vg.js";
-    const AUS_BOX_SPEC   = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/box_plot/js/box_plot.vg.json";
+    // ==== SPEC URLs (update if your paths/filenames differ) ====
+    const MAP_SPEC      = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/climate_map/js/climate_choropleth.vg.json";
+    const AUS_BARS_SPEC = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/bar_graph/js/bar_graph.vg.js";
+    const AUS_TREND_SPEC = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/trend/js/country_trend.vg.json"
+    const AUS_BOX_SPEC  = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/box_plot/js/box_plot.vg.json";
 
     function showErr(mountSelector, url, err){
       const el = document.querySelector(mountSelector);
@@ -57,14 +62,10 @@
       console.error(err);
     }
 
-    vegaEmbed("#map", MAP_SPEC, {actions:false})
-      .catch(err => showErr("#map", MAP_SPEC, err));
-
-    vegaEmbed("#aus_decadal", AUS_BARS_SPEC, {actions:false})
-      .catch(err => showErr("#aus_decadal", AUS_BARS_SPEC, err));
-
-    vegaEmbed("#aus_boxplots", AUS_BOX_SPEC, {actions:false})
-      .catch(err => showErr("#aus_boxplots", AUS_BOX_SPEC, err));
+    vegaEmbed("#world_map", MAP_SPEC, {actions:false}).catch(err => showErr("#world_map", MAP_SPEC, err));
+    vegaEmbed("#aus_decadal", AUS_BARS_SPEC, {actions:false}).catch(err => showErr("#aus_decadal", AUS_BARS_SPEC, err));
+    vegaEmbed("#aus_trend", AUS_TREND_SPEC, {actions:false}).catch(err => showErr("#aus_trend", AUS_TREND_SPEC, err));
+    vegaEmbed("#aus_boxplots", AUS_BOX_SPEC, {actions:false}).catch(err => showErr("#aus_boxplots", AUS_BOX_SPEC, err));
   </script>
 </body>
 </html>
