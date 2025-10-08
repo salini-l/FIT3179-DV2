@@ -7,7 +7,7 @@
   "height": 360,
 
   "data": {
-    "url": "https://salini-l.github.io/fit3179-week9-map/data/temp_change_country_year.csv"
+    "url": "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/box_plot/data/temp_change_country_year.csv"
   },
 
   "transform": [
@@ -28,10 +28,7 @@
                "axis": { "labelAngle": 0, "labelPadding": 8 } },
         "y": { "field": "TempChange_C", "type": "quantitative", "title": "Temperature Change (°C)" },
         "color": { "value": "#9ca3af" },           
-        "tooltip": [
-          { "field": "Decade", "title": "Decade" },
-          { "field": "TempChange_C", "title": "Values (annual)", "aggregate": "count" }
-        ]
+        "tooltip": true
       }
     },
 
@@ -60,7 +57,10 @@
             "range": ["#fee5d9","#fcbba1","#fb6a4a","#ef3b2c","#cb181d"]
           }
         },
-        "tooltip": true
+        "tooltip": [
+          { "field": "Year", "title": "Year", "format": "d" },
+          { "field": "TempChange_C", "title": "ΔT (°C)", "format": "+.2f" }
+        ]
       }
     }
   ],
