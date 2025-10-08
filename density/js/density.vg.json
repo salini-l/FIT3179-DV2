@@ -1,0 +1,63 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Distribution of Annual Temperature Anomalies by Decade in Australia",
+  "width": 800,
+  "height": 400,
+
+  "data": {
+    "url": "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/box_plot/data/temp_change_country_year.csv"
+  },
+
+  "transform": [
+    { "filter": "datum.Area == 'Australia'" },
+    { "calculate": "floor(datum.Year/10)*10", "as": "DecadeNum" },
+    { "calculate": "toString(datum.DecadeNum)", "as": "Decade" },
+    { "filter": "datum.DecadeNum >= 1960 && datum.DecadeNum <= 2010" },
+    {
+      "density": "TempChange_C",
+      "groupby": ["Decade"],
+      "extent": [-1, 3],
+      "steps": 100
+    }
+  ],
+
+  "mark": {
+    "type": "area",
+    "opacity": 0.4,
+    "interpolate": "monotone"
+  },
+
+  "encoding": {
+    "x": {
+      "field": "value",
+      "type": "quantitative",
+      "title": "Temperature Anomaly (°C)"
+    },
+    "y": {
+      "field": "density",
+      "type": "quantitative",
+      "title": "Density"
+    },
+    "color": {
+      "field": "Decade",
+      "type": "nominal",
+      "sort": ["1960","1970","1980","1990","2000","2010"],
+      "scale": { "scheme": "reds" },
+      "title": "Decade"
+    },
+    "tooltip": [
+      { "field": "Decade", "title": "Decade" },
+      { "field": "value", "title": "Anomaly (°C)", "format": "+.2f" },
+      { "field": "density", "title": "Density", "format": ".3f" }
+    ]
+  },
+
+  "config": {
+    "axis": {
+      "gridColor": "#dddddd",      
+      "gridOpacity": 0.3           
+    },
+    "view": { "stroke": null },
+    "legend": { "titleFontSize": 12, "labelFontSize": 11 }
+  }
+}
