@@ -60,10 +60,7 @@
             "range": ["#fee5d9","#fcbba1","#fb6a4a","#ef3b2c","#cb181d"]
           }
         },
-        "tooltip": [
-          { "field": "Year", "title": "Year", "format": "d" },
-          { "field": "TempChange_C", "title": "ΔT (°C)", "format": "+.2f" }
-        ]
+        "tooltip": true
       }
     }
   ],
