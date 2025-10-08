@@ -1,8 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {
-    "text": "Annual Temperature Anomalies by Decade in Australia",    "dy": 6
-  },
+  "title": { "text": "Annual Temperature Anomalies by Decade in Australia" },
   "width": 900,
   "height": 360,
 
@@ -12,42 +10,57 @@
 
   "transform": [
     { "filter": "datum.Area == 'Australia'" },
-    { "calculate": "floor(datum.Year/10)*10", "as": "Decade" },
-    { "filter": "datum.Decade >= 1960 && datum.Decade <= 2010" }
+    { "calculate": "floor(datum.Year/10)*10", "as": "DecadeNum" },
+    { "calculate": "toString(datum.DecadeNum)", "as": "Decade" },
+    { "filter": "datum.DecadeNum >= 1960 && datum.DecadeNum <= 2010" },
+    {
+      "window": [
+        { "op": "rank", "as": "year_rank" },          
+        { "op": "count", "as": "year_count" }
+      ],
+      "groupby": ["DecadeNum"],
+      "sort": [{ "field": "Year", "order": "ascending" }]
+    },
+    {
+      "calculate": "((datum.year_rank - 1) / (datum.year_count - 1) - 0.5) * 30",
+      "as": "x_jitter"
+    }
   ],
 
   "layer": [
-    { "mark": { "type": "rule", "stroke": "#9ca3af", "strokeDash": [4,4] },
-      "encoding": { "y": { "datum": 0 } } },
+    {
+      "mark": { "type": "rule", "stroke": "#9ca3af", "strokeDash": [4,4] },
+      "encoding": { "y": { "datum": 0 } }
+    },
 
     {
       "mark": { "type": "boxplot", "extent": "min-max", "median": {"color": "#111827"} },
       "encoding": {
-        "x": { "field": "Decade", "type": "ordinal", "title": "Decade",
-               "sort": ["1960","1970","1980","1990","2000","2010"],
-               "axis": { "labelAngle": 0, "labelPadding": 8 } },
+        "x": {
+          "field": "Decade",
+          "type": "nominal",
+          "sort": ["1960","1970","1980","1990","2000","2010"],
+          "axis": { "labelAngle": 0, "labelPadding": 8, "title": "Decade" }
+        },
         "y": { "field": "TempChange_C", "type": "quantitative", "title": "Temperature Change (°C)" },
-        "color": { "value": "#9ca3af" },           
+        "color": { "value": "#9ca3af" },
         "tooltip": true
       }
     },
 
     {
-      "transform": [
-        { "calculate": "random()", "as": "j" }   
-      ],
-      "mark": { "type": "point", "filled": true, "size": 36, "opacity": 0.65 },
+      "mark": { "type": "point", "filled": true, "size": 36, "opacity": 0.7 },
       "encoding": {
         "x": {
-          "field": "Decade", "type": "ordinal",
+          "field": "Decade",
+          "type": "nominal",
           "sort": ["1960","1970","1980","1990","2000","2010"],
-          "title": "Decade",
-          "axis": { "labelAngle": 0, "labelPadding": 8 },
-          "offset": 0,
+          "axis": { "labelAngle": 0 },
           "bandPosition": 0.5
         },
-        "xOffset": { "field": "j", "type": "quantitative", "scale": { "domain": [0,1], "range": [-12,12] } },
+        "xOffset": { "field": "x_jitter", "type": "quantitative" },   
         "y": { "field": "TempChange_C", "type": "quantitative" },
+        "detail": { "field": "Year" },
         "color": {
           "field": "TempChange_C", "type": "quantitative",
           "title": "Temperature Change (°C)",
@@ -57,7 +70,10 @@
             "range": ["#fee5d9","#fcbba1","#fb6a4a","#ef3b2c","#cb181d"]
           }
         },
-        "tooltip": true
+        "tooltip": [
+          { "field": "Year", "title": "Year", "format": "d" },
+          { "field": "TempChange_C", "title": "ΔT (°C)", "format": "+.2f" }
+        ]
       }
     }
   ],
@@ -68,4 +84,5 @@
     "legend": { "titleFontSize": 12, "labelFontSize": 11 }
   }
 }
+
 
