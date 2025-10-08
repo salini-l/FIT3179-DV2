@@ -39,8 +39,8 @@
 
     <section class="grid" style="margin-top:16px">
       <section class="card" style="grid-column:1/-1">
-        <h2>Australia — Annual Anomalies by Decade (Boxplots)</h2>
-        <div id="aus_boxplots" class="vis"></div>
+        <h2>Australia — Annual Anomalies by Decade </h2>
+        <div id="aus_density" class="vis"></div>
       </section>
     </section>
   </main>
@@ -50,11 +50,11 @@
   </footer>
 
   <script>
-    // ==== SPEC URLs (update if your paths/filenames differ) ====
+    // ==== SPEC URLs ====
     const MAP_SPEC      = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/climate_map/js/climate_choropleth.vg.json";
     const AUS_BARS_SPEC = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/bar_graph/js/bar_graph.vg.js";
     const AUS_TREND_SPEC = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/trend/js/country_trend.vg.json"
-    const AUS_BOX_SPEC  = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/box_plot/js/box_plot.vg.json";
+    const AUS_DENSITY  = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/density/js/density.vg.json";
 
     function showErr(mountSelector, url, err){
       const el = document.querySelector(mountSelector);
@@ -65,7 +65,7 @@
     vegaEmbed("#world_map", MAP_SPEC, {actions:false}).catch(err => showErr("#world_map", MAP_SPEC, err));
     vegaEmbed("#aus_decadal", AUS_BARS_SPEC, {actions:false}).catch(err => showErr("#aus_decadal", AUS_BARS_SPEC, err));
     vegaEmbed("#aus_trend", AUS_TREND_SPEC, {actions:false}).catch(err => showErr("#aus_trend", AUS_TREND_SPEC, err));
-    vegaEmbed("#aus_boxplots", AUS_BOX_SPEC, {actions:false}).catch(err => showErr("#aus_boxplots", AUS_BOX_SPEC, err));
+    vegaEmbed("#aus_density", AUS_DENSITY, {actions:false}).catch(err => showErr("#aus_density", AUS_DENSITY, err));
   </script>
 </body>
 </html>
