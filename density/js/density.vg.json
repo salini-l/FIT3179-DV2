@@ -42,7 +42,7 @@
       "field": "Decade",
       "type": "nominal",
       "sort": ["1960","1970","1980","1990","2000","2010"],
-      "scale": { "scheme": "reds" },
+      "scale": { "scheme": "purples" },
       "title": "Decade"
     },
     "tooltip": [
