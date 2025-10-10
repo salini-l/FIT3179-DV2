@@ -52,7 +52,7 @@
         {
           "lookup": "properties.NAME",
           "from": {
-            "data": { "url": "https://salini-l.github.io/fit3179-week9-map/data/temp_change_decade_2010s.csv" },
+            "data": { "url": "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/climate_map/data/temp_change_decade_2010s.csv" },
             "key": "Area",
             "fields": ["Anomaly_2010s_C"]
           }
@@ -113,35 +113,6 @@
       "mark": { "type": "geoshape", "fill": null, "stroke": "#111827", "strokeWidth": 1.5 }
     },
 
-    {
-      "data": { "url": "https://salini-l.github.io/fit3179-week9-map/data/temp_change_decade_2010s.csv" },
-      "transform": [
-        { "filter": "isValid(datum.Anomaly_2010s_C)" },
-        {
-          "joinaggregate": [
-            { "op": "mean", "field": "Anomaly_2010s_C", "as": "GlobalMean_C" }
-          ]
-        },
-        { "filter": "datum.Area == 'Australia'" },
-        { "calculate": "datum.Anomaly_2010s_C - datum.GlobalMean_C", "as": "DeltaFromGlobal" },
-        { "calculate": "'Australia: ' + format(datum.DeltaFromGlobal, '+.2f') + ' °C vs global'", "as": "label" }
-      ],
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "dx": 6,
-        "dy": -6,
-        "fontSize": 12,
-        "fontWeight": "bold",
-        "fill": "#111827"
-      },
-      "encoding": {
-        "longitude": { "field": "lon", "type": "quantitative" },
-        "latitude":  { "field": "lat", "type": "quantitative" },
-        "text":      { "field": "label" }
-      }
-    }
-
 
   ],
 
@@ -150,5 +121,6 @@
     "legend": { "titleFontSize": 12, "labelFontSize": 11 }
   }
 }
+
 
 
