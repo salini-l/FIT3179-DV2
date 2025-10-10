@@ -13,48 +13,101 @@
 </head>
 <body>
   <header>
-    <h1>Climate Change Visualisations</h1>
-    <p class="note">2010s temperature anomaly map and Australia-focused charts.</p>
+    <h1>Climate Change in Australia</h1>
+    <p class="desc">
+      This page explores how surface temperatures have shifted relative to a mid-20th-century baseline.
+      The global map shows which regions warmed above or below the global mean in the 2010s, while the
+      Australia views summarise decadal averages, the year-by-year trend, and how the distribution of annual
+      anomalies has shifted over time. The page has a focus on Australia while looking at a global perspective.
+    </p>
   </header>
 
   <main>
+  <section class="grid" style="margin-top:16px"></section>
     <section class="grid">
       <section class="card">
-        <h2>Map — 2010s Above/Below Global Mean</h2>
-        <div id="world_map" class="vis"></div>
-      </section>
-
-      <section class="card">
-        <h2>Australia — Decadal Mean Temperature Anomaly</h2>
-        <div id="aus_decadal" class="vis"></div>
+        <h2>How Each Country Compared to the Global Mean</h2>
+        <p class="desc">
+          Countries are shaded by their average temperature anomaly in the 2010s relative to the baseline.
+          Darker shades indicate larger changes from the baseline. This makes it easy to spot regions warming
+          faster than the global mean.
+        </p>
+        <figure>
+          <div id="world_map" class="vis" aria-label="Global map showing 2010s temperature anomalies relative to baseline"></div>
+          <figcaption>
+            Australia is shown to be 0.27°C below the global warming mean in the 2010s. 
+          </figcaption>
+        </figure>
       </section>
     </section>
 
+    <section class="grid" style="margin-top:16px"></section>
       <section class="card">
-        <h2>Trend Graph</h2>
-        <div id="aus_trend" class="vis"></div>
+        <h2>Australia’s Warming by Decade</h2>
+        <p class="desc">
+          Each bar aggregates annual anomalies within a decade, showing year-to-year variences.
+          Taller bars indicate warmer decades.
+        </p>
+        <figure>
+          <div id="aus_decadal" class="vis" aria-label="Bar chart of Australia's decadal mean temperature anomalies"></div>
+          <figcaption>Each decade’s average anomaly rises over time, highlighting a clear long-term warming trend.</figcaption>
+        </figure>
       </section>
     </section>
 
+    <section class="grid" style="margin-top:16px"></section>
+      <section class="card">
+        <h2>Australia's Annual Warming Trajectory</h2>
+        <p class="desc">
+          This graph depicts annual temperature anomalies for Australia relative to the baseline. 
+          Short-term ups and downs reflect year-to-year variability.
+          Read the overall slope rather than any single year to understand the climate signal.
+        </p>
+        <figure>
+          <div id="aus_trend" class="vis" aria-label="Line chart of Australia's annual temperature anomalies over time"></div>
+          <figcaption>
+            Despite short term swings, the trend climbs steadily. 
+            Recent years are consistently warmer than early records.
+          </figcaption>
+        </figure>
+      </section>
+    </section>
 
     <section class="grid" style="margin-top:16px">
       <section class="card" style="grid-column:1/-1">
-        <h2>Australia — Annual Anomalies by Decade </h2>
-        <div id="aus_density" class="vis"></div>
+        <h2>Density of Annual Anomalies by Decade</h2>
+        <p class="desc">
+          This view compares the spread and central tendency of yearly anomalies across decades. Wider shapes
+          indicate more variability and a shift upward across decades shows that typical years are getting warmer.
+        </p>
+        <figure>
+          <div id="aus_density" class="vis" aria-label="Distribution view of Australia's annual temperature anomalies by decade"></div>
+          <figcaption>
+            The peaks shift right and in later decades broaden.
+            This indicates that typically years are getting warmer and variability is higher.
+          </figcaption>
+        </figure>
       </section>
     </section>
   </main>
 
   <footer>
-    Source: FAO Global Surface Temperature Change (baseline 1951–1980). Visualised with Vega-Lite.
+    <p><strong>Author:</strong> Salini Gardiya Lokuhewage &nbsp;|&nbsp; <strong>Date:</strong> 10 Oct 2025 </p>
+
+    <p>Sources:</p>
+    <ul style="margin:6px 0 0; padding-left:18px;">
+      <li><a href="https://www.fao.org/faostat/en/#data/ET" target="_blank" rel="noopener">FAOSTAT(Food and Agriculture Organization of the United Nations)</a></li>
+      <li><a href="https://www.kaggle.com/datasets/sevgisarac/temperature-change" target="_blank" rel="noopener">Kaggle</a></li>
+    </ul>
+    <p style="margin:8px 0 0;">Visualised with Vega-Lite.</p>
   </footer>
 
   <script>
     // ==== SPEC URLs ====
-    const MAP_SPEC      = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/climate_map/js/climate_choropleth.vg.json";
-    const AUS_BARS_SPEC = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/bar_graph/js/bar_graph.vg.js";
-    const AUS_TREND_SPEC = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/trend/js/country_trend.vg.json"
-    const AUS_DENSITY  = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/density/js/density.vg.json";
+    const MAP_SPEC       = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/climate_map/js/climate_choropleth.vg.json";
+    const AUS_BARS_SPEC  = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/bar_graph/js/bar_graph.vg.js";
+    const AUS_TREND_SPEC = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/trend/js/country_trend.vg.json";
+    const AUS_DENSITY    = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/density/js/density.vg.json";
 
     function showErr(mountSelector, url, err){
       const el = document.querySelector(mountSelector);
