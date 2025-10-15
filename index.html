@@ -13,12 +13,15 @@
 </head>
 <body>
   <header>
-    <h1>Climate Change in Australia</h1>
+    <h1>Decades of Change: The Warming Story of Australia</h1>
     <p class="desc">
+      Climate change is one of the most significant challenges of our time, driven by rising global temperatures and shifting weather patterns. 
       This page explores how surface temperatures have shifted relative to a mid-20th-century baseline.
       The global map shows which regions warmed above or below the global mean in the 2010s, while the
       Australia views summarise decadal averages, the year-by-year trend, and how the distribution of annual
-      anomalies has shifted over time. The page has a focus on Australia while looking at a global perspective.
+      anomalies has shifted over time. 
+      This visualisation highlights how Australia’s climate has warmed over the decades, 
+      reflecting the broader global trend of accelerating change.
     </p>
   </header>
 
@@ -35,7 +38,11 @@
         <figure>
           <div id="world_map" class="vis" aria-label="Global map showing 2010s temperature anomalies relative to baseline"></div>
           <figcaption>
-            Australia is shown to be 0.27°C below the global warming mean in the 2010s. 
+            Regions in darker red indicate greater warming, while areas in blue represent below-average warming. 
+            The global mean change in temperature from a 2010s baseline was1.22°C. 
+            Australia is shown to be around 0.27°C below the global mean with a rise in temperature by 0.95°C,
+            whereas countries such as India and Chile experienced significantly above-average temperature increases. 
+            The visual highlights how warming patterns vary geographically, with varying regional differences in the rate of temperature rise. 
           </figcaption>
         </figure>
       </section>
@@ -50,7 +57,13 @@
         </p>
         <figure>
           <div id="aus_decadal" class="vis" aria-label="Bar chart of Australia's decadal mean temperature anomalies"></div>
-          <figcaption>Each decade’s average anomaly rises over time, highlighting a clear long-term warming trend.</figcaption>
+          <figcaption>
+            This chart shows a steady upward trend across each decade. 
+            Starting from approximately –0.02°C in the 1960s, the national average anomaly increased to 
+            +0.08°C in the 1970s, +0.38°C in the 1980s, +0.48°C in the 1990s, and reached around 
+            +0.95°C by the 2010s. The clear stepwise rise in bars reflects a long-term warming pattern, 
+            with each decade showing higher mean temperatures than the one before it.
+          </figcaption>
         </figure>
       </section>
     </section>
@@ -62,12 +75,16 @@
           This graph depicts annual temperature anomalies for Australia relative to the baseline. 
           Short-term ups and downs reflect year-to-year variability.
           Read the overall slope rather than any single year to understand the climate signal.
+          ΔT represents change in temperature.
         </p>
         <figure>
           <div id="aus_trend" class="vis" aria-label="Line chart of Australia's annual temperature anomalies over time"></div>
           <figcaption>
-            Despite short term swings, the trend climbs steadily. 
-            Recent years are consistently warmer than early records.
+            Despite short-term fluctuations from year to year, the overall trend line climbs consistently upward, 
+            indicating persistent warming. Peaks are visible around 1973, 1998 and 2013, 
+            orresponding to globally warm periods, while dips such as 1976, 2000 and 2011 
+            reflect temporary cooling due to climatic variability. 
+            The mean temperature change line reinforces how recent years have been consistently warmer than early records.
           </figcaption>
         </figure>
       </section>
@@ -83,12 +100,30 @@
         <figure>
           <div id="aus_density" class="vis" aria-label="Distribution view of Australia's annual temperature anomalies by decade"></div>
           <figcaption>
-            The peaks shift right and in later decades broaden.
-            This indicates that typically years are getting warmer and variability is higher.
+            In the earlier decades, such as the 1960s and 1970s, the peaks are centered around approximately 0.12°C to 0.20°C, 
+            indicating relatively stable and cooler conditions. From the 1980s onward, 
+            the distributions progressively shifted to the right, with the 2000s and 2010s peaking near 0.76°C to 1.16°C, 
+            reflecting a clear warming trend. The later decades also display broader curves, 
+            suggesting increased variability in annual temperatures. 
           </figcaption>
         </figure>
       </section>
     </section>
+
+    <section class="grid" style="margin-top:16px">
+      <section class="card" style="grid-column:1/-1">
+        <h2>Conclusion</h2>
+        <p class="desc">
+          Over the past six decades, Australia has experienced a clear upward warming trend, 
+          with average annual temperature anomalies increasing steadily across decades.
+          Earlier decades, such as the 1960s and 1970s, show relatively stable conditions, 
+          while the 2000s and 2010s display both higher averages and greater variability.
+          These trends highlight the persistent impact of global climate change on Australia, 
+          highlighting the importance of monitoring, adaptation, and mitigation efforts.
+        </p>
+      </section>
+    </section>
+
   </main>
 
   <footer>
@@ -102,6 +137,13 @@
     <p style="margin:8px 0 0;">Visualised with Vega-Lite.</p>
   </footer>
 
+  <div id="vis" style="display:flex; flex-direction:column; gap:10px;">
+  <div id="checkboxes" style="display:flex; gap:15px;"></div>
+  <div id="chart"></div>
+</div>
+
+
+
   <script>
     // ==== SPEC URLs ====
     const MAP_SPEC       = "https://raw.githubusercontent.com/salini-l/FIT3179-DV2/refs/heads/main/climate_map/js/climate_choropleth.vg.json";
@@ -114,7 +156,6 @@
       el.innerHTML = `<div class="err">Failed to load visualisation.\n\nSpec URL tried:\n${url}\n\n${err}</div>`;
       console.error(err);
     }
-
     vegaEmbed("#world_map", MAP_SPEC, {actions:false}).catch(err => showErr("#world_map", MAP_SPEC, err));
     vegaEmbed("#aus_decadal", AUS_BARS_SPEC, {actions:false}).catch(err => showErr("#aus_decadal", AUS_BARS_SPEC, err));
     vegaEmbed("#aus_trend", AUS_TREND_SPEC, {actions:false}).catch(err => showErr("#aus_trend", AUS_TREND_SPEC, err));
